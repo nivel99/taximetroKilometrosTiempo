@@ -4,7 +4,8 @@ import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
 import Taximetro from './Vistas/Taximetro';
-import Home from './Vistas/Home';
+import Home from './Vistas/Home'; 
+import TarifaFinal from './Vistas/TarifaFinal';
 
 class HomeScreen extends React.Component {
 render() {
@@ -22,6 +23,9 @@ Home: {
 },
 Taximetro: {
 screen: Taximetro
+},
+TarifaFinal: {
+  screen:TarifaFinal
 }
 });
 

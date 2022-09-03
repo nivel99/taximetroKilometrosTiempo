@@ -172,7 +172,11 @@
           </TouchableOpacity>
          </View>
          <View style={styles.buttonContainer}>
-         <TouchableOpacity style={{backgroundColor:'red', padding:10, borderRadius:10 }} onPress={()=> this.setState({detener:true}) } >
+         <TouchableOpacity style={{backgroundColor:'red', padding:10, borderRadius:10 }} onPress={()=>
+             {
+             this.setState({detener:true})
+             this.props.navigation.navigate("TarifaFinal",{TarifaTotal:this.state.tarifaFinal}) 
+             }} >
             <Text style={{color:'white'}} >Finalizar</Text>
           </TouchableOpacity>
          </View>
