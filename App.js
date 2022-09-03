@@ -97,7 +97,12 @@
       //Costo por minuto: 220
       //Tiempo en carro mientras esta parado o va despacio: parseFloat(this.state.cuenta)
       let tarifaTiempo = 220 * parseFloat(this.state.cuenta) / 60
-      this.setState({tarifaFinal: parseInt(tarifaKilometros) + parseInt(tarifaTiempo.toFixed(0)) })
+      if(this.state.cuenta >= 84 ){ 
+        this.setState({tarifaFinal: parseInt(tarifaKilometros) + parseInt(tarifaTiempo.toFixed(0)) })
+      }else{
+        this.setState({tarifaFinal: 5800 })
+      }
+      
      }, 1000);
    }
  
