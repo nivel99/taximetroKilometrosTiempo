@@ -49,12 +49,21 @@
        }),
        cuenta:0,
        valorMinima:3800,
-       tarifaFinal:0
+       tarifaFinal:0,
+       detener:false
      };
    }
  
    componentDidMount() {
      const { coordinate } = this.state;
+     PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+      {
+        title: 'Location Access Permission',
+        message: 'We would like to use your location',
+        buttonPositive: 'Okay'
+      }
+    )
  
      this.watchID = Geolocation.watchPosition(
        position => {
@@ -86,6 +95,8 @@
      //enableHighAccuracy: false, cuando se usa para el dispositivo real y en true para el emulador
      //aqui es donde hago el cronometro y hago el calculo de la tarifa final
      setInterval(() => {
+      if(this.state.detener == false){
+
       this.setState({cuenta: this.state.cuenta + 1})
       //Tarifa base : 3800
       //Costo por kilometro : 1538
@@ -102,7 +113,9 @@
       }else{
         this.setState({tarifaFinal: 5800 })
       }
+    }else{
       
+    }
      }, 1000);
    }
  
@@ -156,6 +169,11 @@
          <View style={styles.buttonContainer}>
          <TouchableOpacity style={[styles.bubble, styles.button]}>
             <Text>Tarifa: ${this.state.tarifaFinal}</Text>
+          </TouchableOpacity>
+         </View>
+         <View style={styles.buttonContainer}>
+         <TouchableOpacity style={{backgroundColor:'red', padding:10, borderRadius:10 }} onPress={()=> this.setState({detener:true}) } >
+            <Text style={{color:'white'}} >Finalizar</Text>
           </TouchableOpacity>
          </View>
        </View>
