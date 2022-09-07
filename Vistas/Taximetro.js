@@ -25,6 +25,7 @@
  import haversine from "haversine";
  import Geolocation from '@react-native-community/geolocation';
  import { Stopwatch, Timer } from 'react-native-stopwatch-timer';
+ import Contador from '../Componentes/Contador';
  
  // const LATITUDE = 29.95539;
  // const LONGITUDE = 78.07513;
@@ -33,6 +34,9 @@
  const LATITUDE = 6.341308;
  const LONGITUDE = -75.5625925;
  
+ let tiempoSegundos = 0;
+ let minutos = 0;
+
  class AnimatedMarkers extends React.Component {
    constructor(props) {
      super(props);
@@ -49,7 +53,6 @@
          latitudeDelta: 0,
          longitudeDelta: 0
        }),
-       cuenta:0,
        valorMinima:3800,
        tarifaFinal:0,
        detener:false,
@@ -106,28 +109,24 @@
      //enableHighAccuracy: false, cuando se usa para el dispositivo real y en true para el emulador
      //aqui es donde hago el cronometro y hago el calculo de la tarifa final
      setInterval(() => {
-      if(this.state.detener == false){
-
-      this.setState({cuenta: this.state.cuenta + 1})
-      //Tarifa base : 3800
-      //Costo por kilometro : 1538
-      //Distancia de viaje:  parseFloat(this.state.distanceTravelled).toFixed(2)
-      //Total de costo en kilometros :
-      let tarifaKilometros = 5800 + (1538 * parseFloat(this.state.distanceTravelled).toFixed(2)) 
-
-      //arranca cuando va en minuto 45 comienza a contar
-      //Costo por minuto: 220
-      //Tiempo en carro mientras esta parado o va despacio: parseFloat(this.state.cuenta)
-      let tarifaTiempo = 220 * parseFloat(this.state.cuenta) / 60
-      if(this.state.cuenta >= 84 ){ 
-        this.setState({tarifaFinal: parseInt(tarifaKilometros) + parseInt(tarifaTiempo.toFixed(0)) })
+        if(this.state.detener == false){
+  
+        //Tarifa base : 3800
+        //Costo por kilometro : 1538
+        //Distancia de viaje:  parseFloat(this.state.distanceTravelled).toFixed(2)
+        //Total de costo en kilometros :
+        let tarifaKilometros = 3800 + (1538 * parseFloat(this.state.distanceTravelled).toFixed(2)) 
+        
+        if(parseFloat(this.state.distanceTravelled).toFixed(2) >= 1.4 ){ 
+          //this.setState({tarifaFinal: parseInt(tarifaKilometros) + parseInt(tarifaTiempo.toFixed(0)) })
+          this.setState({tarifaFinal: parseInt(tarifaKilometros) })
+        }else{
+          this.setState({tarifaFinal: 5800 })
+        }
       }else{
-        this.setState({tarifaFinal: 5800 })
+        
       }
-    }else{
-      
-    }
-     }, 1000);
+       }, 1000);
    }
  
    componentWillUnmount() {
@@ -164,6 +163,13 @@
   }
   
   getFormattedTime(time) {
+      tiempoSegundos = time
+      let cadenaSegundos = tiempoSegundos.split(':')
+      if(cadenaSegundos[2] == '59'){
+        minutos = minutos + 1
+        console.log('Ya paso un minuto'+minutos)
+      }
+      console.log(cadenaSegundos[2])
       this.currentTime = time;
   };
  
@@ -192,11 +198,6 @@
                {parseFloat(this.state.distanceTravelled).toFixed(2)} km
              </Text>
            </TouchableOpacity>
-           <TouchableOpacity style={[styles.bubble, styles.button]}>
-             <Text style={styles.bottomBarContent}>
-             Tiempo: {parseFloat(this.state.cuenta)}
-             </Text>
-           </TouchableOpacity>
          </View>
          <View style={styles.buttonContainer}>
          <TouchableOpacity style={[styles.bubble, styles.button]}>
@@ -216,18 +217,23 @@
 
 {/* EL CONTADOR O RELOJ */}
 <View>
-        <Stopwatch laps msecs start={this.state.stopwatchStart}
-          reset={this.state.stopwatchReset}
-          options={options}
-          getTime={this.getFormattedTime} />
-        <TouchableHighlight onPress={this.toggleStopwatch}>
+        {/* <Stopwatch 
+        laps 
+        start={this.state.stopwatchStart}
+        reset={this.state.stopwatchReset}
+        options={options}
+        msecs={false}
+        getTime={this.getFormattedTime}
+        /> */}
+        {/* <TouchableHighlight onPress={this.toggleStopwatch}>
           <Text style={{fontSize: 30}}>{!this.state.stopwatchStart ? "Start" : "Stop"}</Text>
         </TouchableHighlight>
         <TouchableHighlight onPress={this.resetStopwatch}>
           <Text style={{fontSize: 30}}>Reset</Text>
-        </TouchableHighlight>
-        
+        </TouchableHighlight> */}
       </View>
+
+      <Contador/>
 
        </View>
      );
